@@ -1,5 +1,5 @@
 // storage-adapter-import-placeholder
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -17,6 +17,8 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { DiscountCodes } from './collections/DiscountCodes'
+import { Orders } from './collections/Orders'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -60,12 +62,12 @@ export default buildConfig({
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || '',
-    },
+  db: mongooseAdapter({
+    // Mongoose-specific arguments go here.
+    // URL is required.
+    url: process.env.DATABASE_URI,
   }),
-  collections: [Pages, Products, Posts, Media, Categories, Users],
+  collections: [Pages, Products, Orders, Posts, DiscountCodes, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
