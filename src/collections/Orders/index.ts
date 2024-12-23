@@ -88,12 +88,10 @@ export const Orders: CollectionConfig = {
             {
               name: 'Email',
               type: 'text',
-              required: true,
             },
             {
               name: 'Phone Number',
               type: 'text',
-              required: true,
             },
             {
               name: 'Payment Method',
