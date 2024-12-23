@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { authenticated } from '../../access/authenticated'
 import { anyone } from '../../access/anyone'
 export const DiscountCodes: CollectionConfig = {
   slug: 'discounts',
@@ -7,9 +8,9 @@ export const DiscountCodes: CollectionConfig = {
   },
   access: {
     read: anyone,
-    create: anyone,
-    update: anyone,
-    delete: anyone,
+    create: authenticated,
+    update: authenticated,
+    delete: authenticated,
   },
   fields: [
     {
