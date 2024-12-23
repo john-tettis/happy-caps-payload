@@ -19,6 +19,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { DiscountCodes } from './collections/DiscountCodes'
 import { Orders } from './collections/Orders'
+import { Gallery } from './collections/Gallery'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -67,7 +68,7 @@ export default buildConfig({
     // URL is required.
     url: process.env.DATABASE_URI,
   }),
-  collections: [Pages, Products, Orders, Posts, DiscountCodes, Media, Categories, Users],
+  collections: [Products, Orders, DiscountCodes, Gallery, Media, Pages, Posts, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
