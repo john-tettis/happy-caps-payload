@@ -48,7 +48,9 @@ export const Card: React.FC<{
         {!image && <div className=" ">No image</div>}
         {image && typeof image !== 'string' && (
           <Media
-            imgClassName="object-cover h-96 group-hover:scale-95 group-hover:rounded-lg transition-all  duration-200 ease-in-out "
+            imgClassName={cn("object-cover h-96 " +
+              "group-hover:scale-95 group-hover:rounded-lg group-hover:drop-shadow-xl" +
+              " transition-all  duration-200 ease-in-out ")}
             resource={image}
             size="square"
           />
