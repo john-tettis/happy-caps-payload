@@ -1,5 +1,6 @@
+'use client'
 import clsx from 'clsx'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface Props {
   className?: string
@@ -12,7 +13,22 @@ export const Logo = (props: Props) => {
 
   const loading = loadingFromProps || 'lazy'
   const priority = priorityFromProps || 'low'
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const res = await fetch('http://localhost:3000/api/media/6769d77bf5e991d5a7678a22')
+        const data = await res.json()
+        const imageUrl = data.url // Assuming the image field is named `image`
+        setImageUrl(imageUrl)
+      } catch (error) {
+        console.error('Error fetching media:', error)
+      }
+    }
+
+    fetchImage()
+  })
   return (
     /* eslint-disable @next/next/no-img-element */
     <img
@@ -22,8 +38,8 @@ export const Logo = (props: Props) => {
       loading={loading}
       fetchPriority={priority}
       decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-logo-light.svg"
+      className={clsx('max-w-[9.375rem] w-full h-[40px]', className)}
+      src={imageUrl || undefined}
     />
   )
 }
