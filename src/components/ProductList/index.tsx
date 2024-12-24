@@ -1,7 +1,6 @@
 import { cn } from 'src/utilities/cn'
 import React from 'react'
 
-import type { Product } from '@/payload-types'
 
 import { Card, ProductData } from '@/components/ProductCard'
 
