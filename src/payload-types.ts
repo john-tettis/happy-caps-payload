@@ -91,11 +91,11 @@ export interface UserAuthOperations {
  */
 export interface Product {
   id: string;
-  'Product Name': string;
-  'Product Type': 'Bucket Hat' | 'Beanie' | 'Ski Mask' | 'Other';
-  Price: number;
-  Pictures: (string | Media)[];
-  Description: {
+  title: string;
+  product_type: 'Bucket Hat' | 'Beanie' | 'Ski Mask' | 'Other';
+  price: number;
+  pictures: (string | Media)[];
+  description: {
     root: {
       type: string;
       children: {
@@ -110,7 +110,8 @@ export interface Product {
     };
     [k: string]: unknown;
   };
-  Quantity: number;
+  description_html?: string | null;
+  quantity: number;
   updatedAt: string;
   createdAt: string;
 }
@@ -917,12 +918,13 @@ export interface PayloadMigration {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  'Product Name'?: T;
-  'Product Type'?: T;
-  Price?: T;
-  Pictures?: T;
-  Description?: T;
-  Quantity?: T;
+  title?: T;
+  product_type?: T;
+  price?: T;
+  pictures?: T;
+  description?: T;
+  description_html?: T;
+  quantity?: T;
   updatedAt?: T;
   createdAt?: T;
 }

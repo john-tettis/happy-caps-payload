@@ -1,43 +1,61 @@
 import type { CollectionConfig } from 'payload'
+import { authenticated } from '../../access/authenticated'
+import { anyone } from '../../access/anyone'
+import { HTMLConverterFeature, lexicalEditor, lexicalHTML } from '@payloadcms/richtext-lexical'
 
 export const Products: CollectionConfig = {
   slug: 'products',
+  access: {
+    create: authenticated,
+    delete: authenticated,
+    read: anyone,
+    update: authenticated,
+  },
   admin: {
-    useAsTitle: 'Product Name',
+    useAsTitle: 'title',
   },
   fields: [
     {
-      name: 'Product Name',
+      name: 'title',
       type: 'text',
       required: true,
       unique: true,
     },
     {
-      name: 'Product Type',
+      name: 'product_type',
       type: 'radio',
       options: ['Bucket Hat', 'Beanie', 'Ski Mask', 'Other'],
       required: true,
     },
     {
-      name: 'Price',
+      name: 'price',
       type: 'number',
       required: true,
     },
     {
-      name: 'Pictures',
+      name: 'pictures',
       type: 'upload',
       hasMany: true,
       relationTo: 'media',
       required: true,
     },
     {
-      name: 'Description',
+      name: 'description',
       type: 'richText',
       required: true,
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          // The HTMLConverter Feature is the feature which manages the HTML serializers.
+          // If you do not pass any arguments to it, it will use the default serializers.
+          HTMLConverterFeature({}),
+        ],
+      }),
     },
+    lexicalHTML('description', { name: 'description_html' }),
 
     {
-      name: 'Quantity',
+      name: 'quantity',
       type: 'number',
       defaultValue: 1,
       required: true,
