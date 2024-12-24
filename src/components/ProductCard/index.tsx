@@ -37,24 +37,30 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'border border-border rounded-lg overflow-hidden bg-card hover:cursor-pointer',
+        ' group p-2 border-2 border-transparent box-border' +
+          ' overflow-hidden hover:border-gray-600 hover:cursor-pointer' +
+          'transition-all duration-300 ease-in-out',
         className,
       )}
       ref={card.ref}
     >
       <div className="relative w-full ">
-        {!image && <div className="">No image</div>}
-        {image && typeof image !== 'string' && <Media resource={image} size="33vw" />}
+        {!image && <div className=" ">No image</div>}
+        {image && typeof image !== 'string' && (
+          <Media
+            imgClassName="object-cover h-96 group-hover:scale-95 group-hover:rounded-lg transition-all  duration-200 ease-in-out "
+            resource={image}
+            size="square"
+          />
+        )}
       </div>
-      <div className="p-2">
+      <div className="pt-2 pb-2 pr-1 pl-1 bg-white">
         {titleToUse && (
-          <div className="prose">
-            <h3>
-              <Link className="not-prose hover:underline" href={href} ref={link.ref}>
-                {titleToUse}
-              </Link>
-            </h3>
-            <div>${price}</div>
+          <div className="">
+            <Link className=" flex flex-row justify-between mr-2 text-base hover:cursor-pointer " href={href} ref={link.ref}>
+              <h3 className="group-hover:underline">{titleToUse}</h3>
+              <div>${price}</div>
+            </Link>
           </div>
         )}
         {/* {description && (
