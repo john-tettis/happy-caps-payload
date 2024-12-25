@@ -112,6 +112,8 @@ export interface Product {
   };
   description_html?: string | null;
   quantity: number;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -925,6 +927,8 @@ export interface ProductsSelect<T extends boolean = true> {
   description?: T;
   description_html?: T;
   quantity?: T;
+  slug?: T;
+  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }

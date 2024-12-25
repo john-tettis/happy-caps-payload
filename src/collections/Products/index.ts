@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { anyone } from '../../access/anyone'
 import { HTMLConverterFeature, lexicalEditor, lexicalHTML } from '@payloadcms/richtext-lexical'
-
+import { slugField } from '@/fields/slug'
 export const Products: CollectionConfig = {
   slug: 'products',
   access: {
@@ -60,5 +60,7 @@ export const Products: CollectionConfig = {
       defaultValue: 1,
       required: true,
     },
+    ...slugField(),
+
   ],
 }

@@ -11,7 +11,7 @@ import RichText from '../RichText'
 
 export type ProductData = Pick<
   Product,
-  'title' | 'price' | 'pictures' | 'quantity' | 'description' | 'description_html' | 'id'
+  'title' | 'price' | 'pictures' | 'quantity' | 'description' | 'description_html' | 'slug'
 >
 
 export const Card: React.FC<{
@@ -24,15 +24,14 @@ export const Card: React.FC<{
 }> = (props) => {
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, title: titleFromProps } = props
-  console.log(doc)
-  const { title, id, description, price, pictures, quantity } = doc || {}
+  const { title, slug, description, price, pictures, quantity } = doc || {}
   const image = pictures ? pictures[0] : null
 
   // console.log(description_html)
   // const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
   // const sanitizedDescription = description.replace(/\s/g, ' ') // replace non-breaking space with white space
-  const href = `/${relationTo}/${id}`
+  const href = `/${relationTo}/${slug}`
 
   return (
     <article
