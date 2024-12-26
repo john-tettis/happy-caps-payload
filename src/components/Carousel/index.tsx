@@ -40,12 +40,12 @@ const Carousel: React.FC<PropType> = (props) => {
   }, [emblaMainApi, onSelect])
 
   return (
-    <div className="embla">
-      <div className="embla__viewport" ref={emblaMainRef}>
-        <div className="embla__container">
+    <div className="embla w-full ">
+      <div className="embla__viewport w-full" ref={emblaMainRef}>
+        <div className="embla__container w-full">
           {slides.map((url, index) => (
-            <div className="embla__slide" key={index}>
-              <ImageMedia resource={url} alt={`Slide ${index + 1}`} imgClassName="h-96 w-64 object-cover" />
+            <div className="embla__slide w-full" key={index}>
+              <ImageMedia resource={url} alt={`Slide ${index + 1}`} imgClassName="h-96 w-full object-cover" />
             </div>
           ))}
         </div>
