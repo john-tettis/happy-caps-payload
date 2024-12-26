@@ -41,6 +41,8 @@ export default async function Page() {
         </div>
       </div>
 
+
+      <ProductList products={products.docs} />
       <div className="container mb-8">
         <PageRange
           collection="products"
@@ -49,8 +51,6 @@ export default async function Page() {
           totalDocs={products.totalDocs}
         />
       </div>
-      <ProductList products={products.docs} />
-
       <div className="container">
         {products.totalPages > 1 && products.page && (
           <Pagination page={products.page} totalPages={products.totalPages} />
