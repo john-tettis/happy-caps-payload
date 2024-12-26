@@ -14,14 +14,14 @@ export const Thumb: React.FC<PropType> = (props) => {
 
   return (
     <div
-      className={'embla-thumbs__slide'.concat(
-        selected ? ' embla-thumbs__slide--selected' : ''
+      className={'embla-thumbs__slide transition-transform'.concat(
+        selected ? ' -translate-y-1' : ''
       )}
     >
       <button
         onClick={onClick}
         type="button"
-        className="embla-thumbs__slide__number"
+        className="embla-thumbs__slide__number rounded-md"
       >
         <ImageMedia resource={media?.sizes?.square} imgClassName={'w-20 object-scale-down'}></ImageMedia>
       </button>
