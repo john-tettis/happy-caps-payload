@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
@@ -20,7 +19,6 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
 
-
   useEffect(() => {
     setHeaderTheme(null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -32,7 +30,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   w-screen bg-orange-400 " {...(theme ? { 'data-theme': theme } : {})}>
+    <header
+      className=" px-4 relative z-20   w-screen bg-orange-400 "
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
       <div className="py-4 flex justify-start gap-20">
         <Link href="/">
           <Logo loading="eager" priority="high" className="" />
