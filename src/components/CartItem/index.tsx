@@ -39,7 +39,8 @@ const CartItem: React.FC<CartItemProps> = ({ product }) => {
           <ImageMedia
             resource={product.pictures[0]}
             alt={product.title}
-            className="rounded-md w-16 h-16"
+            imgClassName=" object-cover rounded-md w-10 h-10"
+            size="thumbnail"
           />
         ) : (
           <div className="flex items-center justify-center w-20 h-20 bg-gray-200 rounded-md">
