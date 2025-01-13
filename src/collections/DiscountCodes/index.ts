@@ -70,7 +70,10 @@ export const DiscountCodes: CollectionConfig = {
           })
 
           if (!discount.docs.length) {
-            return Response.json({ valid: false }, { status: 400 })
+            return Response.json(
+              { valid: false, message: 'Invalid or expired code' },
+              { status: 400 },
+            )
           }
 
           const discountData = discount.docs[0]
@@ -78,7 +81,13 @@ export const DiscountCodes: CollectionConfig = {
             discountData['Minimum Purchase Amount'] &&
             Number(purchaseAmount) < discountData['Minimum Purchase Amount']
           ) {
-            return Response.json({ valid: true, minimum: false }, { status: 400 })
+            return Response.json(
+              {
+                valid: true,
+                message: `Only valid for orders over ${discountData['Minimum Purchase Amount']}`,
+              },
+              { status: 400 },
+            )
           }
           return Response.json(
             {
