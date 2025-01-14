@@ -5,12 +5,22 @@ import { useCart } from '@/providers/Cart'
 import CartItem from '@/components/CartItem'
 
 export default function Cart() {
-  const { cart, subtotal, total, promoCode, setPromoCode, discount, validatePromoCode } = useCart()
-  const [error, setError] = useState('')
+  const {
+    cart,
+    subtotal,
+    total,
+    promoCode,
+    setPromoCode,
+    promoError,
+    setPromoError,
+    discount,
+    validatePromoCode,
+  } = useCart()
+  // const [error, setError] = useState('')
 
   const handlePromoCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCode(e.target.value)
-    setError('')
+    setPromoError(' ')
   }
 
   if (cart.length === 0) {
@@ -72,7 +82,7 @@ export default function Cart() {
                 Apply
               </button>
             </div>
-            {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+            <p className="text-red-600 text-sm mt-2"> {promoError && promoError}</p>
           </div>
           <Link
             href="/checkout"

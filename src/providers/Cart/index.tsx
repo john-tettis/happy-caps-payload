@@ -10,6 +10,8 @@ interface CartContextType {
   promoCode: string
   setPromoCode: (code: string) => void
   discount: number
+  promoError: string
+  setPromoError: (message: string) => void
   setDiscount: (amount: number) => void
   validatePromoCode: () => Promise<void>
   subtotal: number
@@ -26,6 +28,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Product[]>([])
   const [promoCode, setPromoCode] = useState('')
   const [discount, setDiscount] = useState(0)
+  const [promoError, setPromoError] = useState(' ')
 
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
   const total = subtotal - discount
@@ -60,9 +63,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       const data = await response.json()
       if (response.ok && data.valid) {
         setDiscount(data.discountAmount)
+        setPromoError(' ')
       } else {
         setDiscount(0)
-        alert(data.message || 'Invalid promo code')
+        setPromoError(data.message)
       }
     } catch (err) {
       alert('Failed to validate promo code. Please try again.')
@@ -80,6 +84,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         setPromoCode,
         discount,
         setDiscount,
+        promoError,
+        setPromoError,
         validatePromoCode,
         subtotal,
         total,
