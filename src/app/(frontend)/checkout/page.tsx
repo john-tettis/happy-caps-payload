@@ -48,7 +48,7 @@ export default function Checkout() {
   }
 
   return (
-    <main className="container mx-auto p-8">
+    <main className="container max-w-lg mx-auto p-8">
       <h1 className="text-4xl font-bold mb-6">Checkout</h1>
       <div className="flex flex-col gap-8">
         {/* Customer Details Form */}
