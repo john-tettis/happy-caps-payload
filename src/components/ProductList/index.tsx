@@ -1,7 +1,6 @@
 import { cn } from 'src/utilities/cn'
 import React from 'react'
 
-
 import { Card, ProductData } from '@/components/ProductCard'
 
 export type Props = {
@@ -10,7 +9,7 @@ export type Props = {
 
 export const ProductList: React.FC<Props> = (props) => {
   const { products } = props
-
+  console.log(products)
   return (
     <div className={cn('container')}>
       <div>
