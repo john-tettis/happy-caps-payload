@@ -36,6 +36,10 @@ function useClickableCard<T extends HTMLElement>({
       if (e.target) {
         const target = e.target as Element
 
+        // Check if the target or its ancestor has the exclusion attribute
+        if (target.closest('[data-ignore-click]')) {
+          return // Ignore this click
+        }
         const timeNow = +new Date()
         const parent = target?.closest('a')
 

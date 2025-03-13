@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, PayloadRequest } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { anyone } from '../../access/anyone'
 export const DiscountCodes: CollectionConfig = {
@@ -7,7 +7,7 @@ export const DiscountCodes: CollectionConfig = {
     useAsTitle: 'Discount Code',
   },
   access: {
-    read: anyone,
+    read: authenticated,
     create: authenticated,
     update: authenticated,
     delete: authenticated,
@@ -44,6 +44,65 @@ export const DiscountCodes: CollectionConfig = {
     {
       name: 'Minimum Purchase Amount',
       type: 'number',
+    },
+  ],
+  endpoints: [
+    {
+      path: '/validate',
+      method: 'get',
+      handler: async (req: PayloadRequest) => {
+        try {
+          const code: string = req.query.code as string
+          const purchaseAmount: number = req.query.purchaseAmount as number
+          const discount = await req.payload.find({
+            collection: 'discounts',
+            where: {
+              'Discount Code': {
+                equals: code.toUpperCase(),
+              },
+              'Valid From': {
+                less_than: new Date().toISOString(),
+              },
+              'Valid To': {
+                greater_than: new Date().toISOString(),
+              },
+            },
+          })
+
+          if (!discount.docs.length) {
+            return Response.json(
+              { valid: false, message: 'Invalid or expired code' },
+              { status: 400 },
+            )
+          }
+
+          const discountData = discount.docs[0]
+          if (
+            discountData['Minimum Purchase Amount'] &&
+            Number(purchaseAmount) < discountData['Minimum Purchase Amount']
+          ) {
+            return Response.json(
+              {
+                valid: true,
+                message: `Only valid for orders over ${discountData['Minimum Purchase Amount']}`,
+              },
+              { status: 400 },
+            )
+          }
+          return Response.json(
+            {
+              valid: true,
+              minimum: true,
+              discountType: discountData['Discount Type'],
+              discountAmount: discountData['Discount Amount'],
+            },
+            { status: 200 },
+          )
+        } catch (err) {
+          console.error(err)
+          return Response.json({ message: 'Internal server error' }, { status: 500 })
+        }
+      },
     },
   ],
 }

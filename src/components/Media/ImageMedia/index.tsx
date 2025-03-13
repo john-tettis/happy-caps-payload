@@ -28,6 +28,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     src: srcFromProps,
     loading: loadingFromProps,
   } = props
+  console.log(props)
 
   let width: number | undefined
   let height: number | undefined

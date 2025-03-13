@@ -6,7 +6,7 @@ import RichText from '@/components/RichText'
 import React, { cache } from 'react'
 import PageClient from './page.client'
 import PageBack from '@/components/PageBack'
-
+import AddToCartButton from '@/components/AddToCartButton'
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const products = await payload.find({
@@ -43,7 +43,7 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
   if (!product) return <PayloadRedirects url={url} />
   console.log(product.pictures)
   return (
-    <div className="px-4 flex items-start justify-center pb-16">
+    <main className="px-4 flex items-start justify-center pb-16">
       <PageBack></PageBack>
       <div className="flex sm:flex-row sm:w-min w-full flex-col gap-6  items-center sm:items-start justify-items-center pt-8">
         <div className=" w-full sm:w-64 md:w-96 ">
@@ -51,9 +51,11 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
         </div>
 
         <div className={' mb-6 h-96 w-full sm:w-64 md:w-96 flex flex-col  items-start justify-between'}>
-          <h1 className="text-3xl"> {product.title}</h1>
-          <span>{product.product_type}</span>
-          <RichText className="text-left p-0 m-0" data={product.description}></RichText>
+          <div className={"flex flex-col align-center justify-start"}>
+            <h1 className="text-3xl"> {product.title}</h1>
+            <span>{product.product_type}</span>
+            <RichText className="text-left p-0 m-0" data={product.description}></RichText>
+          </div>
           <div className={'w-full'}>
             <p
               className={'my-1 text-sm '.concat(
@@ -61,15 +63,12 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
               )}
             >
               {product.quantity > 0 ? 'In Stock!' : 'Sold out :('}
-
             </p>
-            <button className="relative flex h-[50px] w-full items-center justify-center overflow-hidden bg-gray-800 text-white shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-600 before:duration-500 before:ease-out hover:shadow-orange-600 hover:before:h-56 hover:before:w-96">
-              <span className="relative z-10">{`Add to cart - $${product.price}`}</span>
-            </button>
+            <AddToCartButton product={product} />
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 const queryProductsBySlug = cache(async ({ slug }: { slug: string }) => {

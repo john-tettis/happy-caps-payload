@@ -1,10 +1,11 @@
 import { cn } from 'src/utilities/cn'
 import React from 'react'
 
-import { Card, ProductData } from '@/components/ProductCard'
+import { Card } from '@/components/ProductCard'
+import { Product } from '@/payload-types'
 
 export type Props = {
-  products: ProductData[]
+  products: Product[]
 }
 
 export const ProductList: React.FC<Props> = (props) => {
