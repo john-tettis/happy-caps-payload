@@ -42,20 +42,6 @@ export default async function Page() {
       </div>
 
       <ClientFilterableProductList initialProducts={products.docs} />
-
-      <div className="container mb-8">
-        <PageRange
-          collection="products"
-          currentPage={products.page}
-          limit={12}
-          totalDocs={products.totalDocs}
-        />
-      </div>
-      <div className="container">
-        {products.totalPages > 1 && products.page && (
-          <Pagination page={products.page} totalPages={products.totalPages} />
-        )}
-      </div>
     </div>
   )
 }

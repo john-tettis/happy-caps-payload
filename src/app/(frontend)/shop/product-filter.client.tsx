@@ -2,13 +2,29 @@
 
 import React, { useState } from 'react'
 import { ProductList } from '@/components/ProductList'
+import { PageRange } from '@/components/PageRange'
 import PageClient from './page.client'
+import { Product } from '@/payload-types'
 
-const ClientFilterableProductList = ({ initialProducts }) => {
-  const [filteredProducts, setFilteredProducts] = useState(initialProducts)
-  const [activeFilters, setActiveFilters] = useState(null)
+interface FilterProps {
+  types: string[]
+  priceRange: {
+    min: number
+    max: number
+  }
+}
 
-  const handleFilterChange = (filters) => {
+interface ClientFilterableProductListProps {
+  initialProducts: Product[]
+}
+
+const ClientFilterableProductList: React.FC<ClientFilterableProductListProps> = ({
+  initialProducts,
+}) => {
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts)
+  const [activeFilters, setActiveFilters] = useState<FilterProps | null>(null)
+
+  const handleFilterChange = (filters: FilterProps | null) => {
     if (!filters) {
       setFilteredProducts(initialProducts)
       setActiveFilters(null)
@@ -52,6 +68,15 @@ const ClientFilterableProductList = ({ initialProducts }) => {
           </div>
         </div>
       )}
+
+      <div className="container mb-4">
+        <PageRange
+          collection="products"
+          totalDocs={filteredProducts.length}
+          currentPage={1}
+          limit={filteredProducts.length}
+        />
+      </div>
 
       <ProductList products={filteredProducts} />
     </>

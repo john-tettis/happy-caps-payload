@@ -5,9 +5,21 @@ import React, { useEffect, useState } from 'react'
 // Product type options from the collection schema
 const PRODUCT_TYPES = ['Bucket Hat', 'Beanie', 'Ski Mask', 'Other']
 
-const PageClient = ({ onFilterChange }) => {
+interface FilterChangeProps {
+  types: string[]
+  priceRange: {
+    min: number
+    max: number
+  }
+}
+
+interface PageClientProps {
+  onFilterChange: (filters: FilterChangeProps | null) => void
+}
+
+const PageClient: React.FC<PageClientProps> = ({ onFilterChange }) => {
   const { setHeaderTheme } = useHeaderTheme()
-  const [selectedTypes, setSelectedTypes] = useState([])
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 })
   const [showFilters, setShowFilters] = useState(false)
 
@@ -15,7 +27,7 @@ const PageClient = ({ onFilterChange }) => {
     setHeaderTheme('light')
   }, [setHeaderTheme])
 
-  const handleTypeChange = (type) => {
+  const handleTypeChange = (type: string) => {
     if (selectedTypes.includes(type)) {
       setSelectedTypes(selectedTypes.filter((t) => t !== type))
     } else {
@@ -23,12 +35,12 @@ const PageClient = ({ onFilterChange }) => {
     }
   }
 
-  const handleMinPriceChange = (e) => {
+  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0
     setPriceRange({ ...priceRange, min: value })
   }
 
-  const handleMaxPriceChange = (e) => {
+  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0
     setPriceRange({ ...priceRange, max: value })
   }
