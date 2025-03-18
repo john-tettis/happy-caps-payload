@@ -20,6 +20,9 @@ import { getServerSideURL } from './utilities/getURL'
 import { DiscountCodes } from './collections/DiscountCodes'
 import { Orders } from './collections/Orders'
 import { Gallery } from './collections/Gallery'
+import { BaseHats } from './collections/BaseHats'
+import { CustomizationOptions } from './collections/CustomizationOptions'
+import { CustomProduct } from './collections/CustomProduct'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -68,7 +71,20 @@ export default buildConfig({
     // URL is required.
     url: process.env.DATABASE_URI,
   }),
-  collections: [Products, Orders, DiscountCodes, Gallery, Media, Pages, Posts, Categories, Users],
+  collections: [
+    Products,
+    Orders,
+    DiscountCodes,
+    Gallery,
+    Media,
+    Pages,
+    Posts,
+    Categories,
+    Users,
+    BaseHats,
+    CustomizationOptions,
+    CustomProduct,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

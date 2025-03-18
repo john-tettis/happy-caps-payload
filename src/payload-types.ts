@@ -20,6 +20,9 @@ export interface Config {
     posts: Post;
     categories: Category;
     users: User;
+    'base-hats': BaseHat;
+    'customization-options': CustomizationOption;
+    'custom-products': CustomProduct;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -39,6 +42,9 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'base-hats': BaseHatsSelect<false> | BaseHatsSelect<true>;
+    'customization-options': CustomizationOptionsSelect<false> | CustomizationOptionsSelect<true>;
+    'custom-products': CustomProductsSelect<false> | CustomProductsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -748,6 +754,223 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "base-hats".
+ */
+export interface BaseHat {
+  id: string;
+  title: string;
+  hat_type: 'bucket-hat' | 'beanie' | 'ski-mask' | 'baseball-cap' | 'other';
+  base_price: number;
+  images: (string | Media)[];
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  description_html?: string | null;
+  available_colors?:
+    | {
+        color_name: string;
+        color_value: string;
+        color_image?: (string | null) | Media;
+        color_in_stock?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  in_stock?: boolean | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customization-options".
+ */
+export interface CustomizationOption {
+  id: string;
+  title: string;
+  description: string;
+  customization_mode: 'predefined' | 'freeform' | 'both';
+  base_price: number;
+  category_image: string | Media;
+  placement_options: ('front' | 'back' | 'left-side' | 'right-side' | 'top' | 'brim')[];
+  compatible_hat_types: ('bucket-hat' | 'beanie' | 'ski-mask' | 'baseball-cap' | 'other')[];
+  is_active?: boolean | null;
+  allows_multiple?: boolean | null;
+  max_quantity_per_hat?: number | null;
+  predefined_options?:
+    | {
+        name: string;
+        description?: string | null;
+        images: (string | Media)[];
+        additional_cost?: number | null;
+        color_options?:
+          | {
+              color_name: string;
+              color_value: string;
+              color_image?: (string | null) | Media;
+              additional_cost?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        size_options?:
+          | {
+              size: string;
+              additional_cost?: number | null;
+              id?: string | null;
+            }[]
+          | null;
+        is_active?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  freeform_settings?: {
+    allow_text?: boolean | null;
+    allow_image_upload?: boolean | null;
+    additional_cost?: number | null;
+    image_upload_instructions?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    text_customization_instructions?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    max_text_length?: number | null;
+  };
+  admin_notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-products".
+ */
+export interface CustomProduct {
+  id: string;
+  title: string;
+  base_hat: string | BaseHat;
+  selected_color: string;
+  selected_size?: string | null;
+  customizations?:
+    | {
+        customization_category: string | CustomizationOption;
+        customization_type: 'predefined' | 'freeform';
+        predefined_option?: string | null;
+        placement: 'front' | 'back' | 'left-side' | 'right-side' | 'top' | 'brim';
+        selected_color?: string | null;
+        selected_size?: string | null;
+        quantity: number;
+        custom_text?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        custom_image?: (string | null) | Media;
+        custom_notes?: string | null;
+        price: number;
+        id?: string | null;
+      }[]
+    | null;
+  total_price: number;
+  order_notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  status: 'draft' | 'in-progress' | 'review' | 'approved' | 'production' | 'completed' | 'shipped' | 'cancelled';
+  admin_notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  customer?: (string | null) | User;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -856,6 +1079,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'base-hats';
+        value: string | BaseHat;
+      } | null)
+    | ({
+        relationTo: 'customization-options';
+        value: string | CustomizationOption;
+      } | null)
+    | ({
+        relationTo: 'custom-products';
+        value: string | CustomProduct;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1279,6 +1514,124 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "base-hats_select".
+ */
+export interface BaseHatsSelect<T extends boolean = true> {
+  title?: T;
+  hat_type?: T;
+  base_price?: T;
+  images?: T;
+  description?: T;
+  description_html?: T;
+  available_colors?:
+    | T
+    | {
+        color_name?: T;
+        color_value?: T;
+        color_image?: T;
+        color_in_stock?: T;
+        id?: T;
+      };
+  in_stock?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customization-options_select".
+ */
+export interface CustomizationOptionsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  customization_mode?: T;
+  base_price?: T;
+  category_image?: T;
+  placement_options?: T;
+  compatible_hat_types?: T;
+  is_active?: T;
+  allows_multiple?: T;
+  max_quantity_per_hat?: T;
+  predefined_options?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        images?: T;
+        additional_cost?: T;
+        color_options?:
+          | T
+          | {
+              color_name?: T;
+              color_value?: T;
+              color_image?: T;
+              additional_cost?: T;
+              id?: T;
+            };
+        size_options?:
+          | T
+          | {
+              size?: T;
+              additional_cost?: T;
+              id?: T;
+            };
+        is_active?: T;
+        id?: T;
+      };
+  freeform_settings?:
+    | T
+    | {
+        allow_text?: T;
+        allow_image_upload?: T;
+        additional_cost?: T;
+        image_upload_instructions?: T;
+        text_customization_instructions?: T;
+        max_text_length?: T;
+      };
+  admin_notes?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-products_select".
+ */
+export interface CustomProductsSelect<T extends boolean = true> {
+  title?: T;
+  base_hat?: T;
+  selected_color?: T;
+  selected_size?: T;
+  customizations?:
+    | T
+    | {
+        customization_category?: T;
+        customization_type?: T;
+        predefined_option?: T;
+        placement?: T;
+        selected_color?: T;
+        selected_size?: T;
+        quantity?: T;
+        custom_text?: T;
+        custom_image?: T;
+        custom_notes?: T;
+        price?: T;
+        id?: T;
+      };
+  total_price?: T;
+  order_notes?: T;
+  status?: T;
+  admin_notes?: T;
+  customer?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
