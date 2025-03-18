@@ -8,6 +8,7 @@ import type { Product } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 import RichText from '../RichText'
+import { useCart } from '@/providers/Cart'
 
 // export type ProductData = Pick<
 //   Product,
@@ -26,6 +27,7 @@ export const Card: React.FC<{
   const { className, doc, relationTo, title: titleFromProps } = props
   const { title, slug, description, price, pictures, quantity } = doc || {}
   const image = pictures ? pictures[0] : null
+  const { isInStock } = useCart()
 
   // console.log(description_html)
   // const hasCategories = categories && Array.isArray(categories) && categories.length > 0
@@ -49,15 +51,26 @@ export const Card: React.FC<{
           <div className="relative w-full ">
             {!image && <div className=" ">No image</div>}
             {image && typeof image !== 'string' && (
-              <Media
-                imgClassName={cn(
-                  'object-cover h-96 w-full ' + // Changed from h-96 to h-64 w-64 for square dimensions
-                    'group-hover:scale-95 group-hover:rounded-lg group-hover:drop-shadow-xl' +
-                    ' transition-all duration-200 ease-in-out ',
+              <div className="relative">
+                <Media
+                  imgClassName={cn(
+                    'object-cover h-96 w-full ' +
+                      'group-hover:scale-95 group-hover:rounded-lg group-hover:drop-shadow-xl' +
+                      ' transition-all duration-200 ease-in-out ',
+                  )}
+                  resource={image}
+                  size="square"
+                />
+
+                {/* Out of Stock Overlay */}
+                {!isInStock(doc) && (
+                  <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center rounded-lg">
+                    <span className="text-white font-bold text-xl px-4 py-2 bg-red-600 rounded-md">
+                      OUT OF STOCK
+                    </span>
+                  </div>
                 )}
-                resource={image}
-                size="square"
-              />
+              </div>
             )}
           </div>
         )}

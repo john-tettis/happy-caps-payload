@@ -4,9 +4,10 @@ import { Product } from '@/payload-types'
 
 interface CartContextType {
   cart: Product[]
-  addToCart: (item: Omit<Product, 'quantity'>) => void
+  addToCart: (item: Product) => void
   removeFromCart: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
+  clearCart: () => void
   promoCode: string
   setPromoCode: (code: string) => void
   discount: number
@@ -16,6 +17,9 @@ interface CartContextType {
   validatePromoCode: () => Promise<void>
   subtotal: number
   total: number
+  isInStock: (product: Product) => boolean
+  canAddMoreToCart: (product: Product) => boolean
+  getAvailableQuantity: (product: Product) => number
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -33,12 +37,44 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
   const total = subtotal - discount
 
-  const addToCart = (item: Omit<Product, 'quantity'>) => {
+  // Check if a product is in stock
+  const isInStock = (product: Product): boolean => {
+    return product.quantity > 0
+  }
+
+  // Get the quantity of a product currently in the cart
+  const getCartQuantity = (productId: string): number => {
+    const cartItem = cart.find((item) => item.id === productId)
+    return cartItem ? cartItem.quantity : 0
+  }
+
+  // Check if more of a product can be added to the cart
+  const canAddMoreToCart = (product: Product): boolean => {
+    const currentQuantityInCart = getCartQuantity(product.id)
+    return currentQuantityInCart < product.quantity
+  }
+
+  // Get the available quantity that can still be added to cart
+  const getAvailableQuantity = (product: Product): number => {
+    const currentQuantityInCart = getCartQuantity(product.id)
+    return Math.max(0, product.quantity - currentQuantityInCart)
+  }
+
+  const addToCart = (item: Product) => {
+    if (!isInStock(item)) return
+
     setCart((prevCart) => {
       const existingItem = prevCart.find((i) => i.id === item.id)
+
       if (existingItem) {
+        // Check if adding one more would exceed available stock
+        if (existingItem.quantity >= item.quantity) {
+          return prevCart // Cannot add more than available stock
+        }
+
         return prevCart.map((i) => (i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i))
       }
+
       return [...prevCart, { ...item, quantity: 1 }]
     })
   }
@@ -48,7 +84,24 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   }
 
   const updateQuantity = (id: string, quantity: number) => {
-    setCart((prevCart) => prevCart.map((item) => (item.id === id ? { ...item, quantity } : item)))
+    setCart((prevCart) => {
+      return prevCart.map((item) => {
+        if (item.id === id) {
+          // Ensure the new quantity doesn't exceed available stock
+          const maxAllowed = item.quantity
+          const newQuantity = Math.min(quantity, maxAllowed)
+          return { ...item, quantity: newQuantity }
+        }
+        return item
+      })
+    })
+  }
+
+  const clearCart = () => {
+    setCart([])
+    setPromoCode('')
+    setDiscount(0)
+    setPromoError(' ')
   }
 
   const validatePromoCode = async () => {
@@ -80,6 +133,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
+        clearCart,
         promoCode,
         setPromoCode,
         discount,
@@ -89,6 +143,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         validatePromoCode,
         subtotal,
         total,
+        isInStock,
+        canAddMoreToCart,
+        getAvailableQuantity,
       }}
     >
       {children}
